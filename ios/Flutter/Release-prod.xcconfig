@@ -1,0 +1,3 @@
+// Release build of the prod flavor (flutter build/run --flavor prod).
+#include "Generated.xcconfig"
+APP_DISPLAY_NAME = NeoAuth Console

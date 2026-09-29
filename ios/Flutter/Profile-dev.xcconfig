@@ -1,0 +1,3 @@
+// Profile build of the dev flavor (flutter build/run --flavor dev).
+#include "Generated.xcconfig"
+APP_DISPLAY_NAME = NeoAuth Console Dev

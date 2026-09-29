@@ -1,0 +1,53 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  //
+  // Every configuration passes --flavor: Android now has dev/prod product
+  // flavors and no flavor-less variant, so a config missing --flavor fails
+  // to build once Gradle has to pick between them. iOS resolves the same
+  // flag to the "dev"/"prod" Xcode scheme.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "neoauth_console (dev)",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--flavor", "dev"]
+    },
+    {
+      "name": "neoauth_console (dev, profile mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "args": ["--flavor", "dev"]
+    },
+    {
+      "name": "neoauth_console (dev, release mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "args": ["--flavor", "dev"]
+    },
+    {
+      "name": "neoauth_console (prod)",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--flavor", "prod"]
+    },
+    {
+      "name": "neoauth_console (prod, profile mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "args": ["--flavor", "prod"]
+    },
+    {
+      "name": "neoauth_console (prod, release mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "args": ["--flavor", "prod"]
+    }
+  ]
+}

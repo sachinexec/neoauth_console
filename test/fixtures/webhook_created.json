@@ -1,0 +1,1 @@
+{"id": "01a0d96d-6427-701d-84b2-56461bc515b4", "url": "http://localhost:9/hook", "events": ["user.deleted", "session.revoked"], "status": "active", "created_at": "2026-09-25T16:37:00.071Z", "secret": "whsec_REDACTED"}
