@@ -11,6 +11,10 @@ dependencies:
     sdk: flutter
   neoauth:
     path: ../neoauth
+  # Top-left flavor ribbon on every route of a debug run. A NeoKit package
+  # that depends on Flutter only.
+  neokit_flavor_banner:
+    path: ../../neokit/flutter/packages/neokit_flavor_banner
   cupertino_icons: ^1.0.9
   dio: ^5.11.1
   fl_chart: ^1.2.0

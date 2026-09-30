@@ -436,6 +436,13 @@ packages:
       relative: true
     source: path
     version: "0.1.0"
+  neokit_flavor_banner:
+    dependency: "direct main"
+    description:
+      path: "../../neokit/flutter/packages/neokit_flavor_banner"
+      relative: true
+    source: path
+    version: "0.1.0"
   objective_c:
     dependency: transitive
     description:
