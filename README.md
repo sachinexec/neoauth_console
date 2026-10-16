@@ -14,6 +14,8 @@ Two flavors:
 | `prod` | `.env.prod` | `in.neodiverse.neoauthconsole` | `in.neodiverse.neoauthconsole` | NeoAuth Console |
 
 Dev installs alongside prod. Each build bundles only its own `.env` file.
+Dev's launcher icon has an amber "DEV" band across the bottom, so the two
+can't be confused on one phone.
 
 ```bash
 fvm flutter run --flavor dev
@@ -33,7 +35,23 @@ A `--dart-define` of the same name overrides the file for a one-off build.
 
 On iOS, `--flavor` selects the `dev`/`prod` scheme and the
 `Debug|Release|Profile-<flavor>` build configurations. Each has an xcconfig in
-`ios/Flutter/` that sets `APP_DISPLAY_NAME`.
+`ios/Flutter/` that sets `APP_DISPLAY_NAME`. Each flavor's configurations use
+its own `AppIcon-<flavor>` icon set.
+
+## Logo and icons
+
+The logo is drawn in code (`lib/ui/app_logo.dart`).
+`tool/render_brand_assets.dart` renders the launcher icons from it into
+`assets/branding/`, and `flutter_launcher_icons-<flavor>.yaml` turns those into
+each flavor's Android and iOS icons. After changing the logo:
+
+```bash
+fvm flutter test tool/render_brand_assets.dart
+```
+
+```bash
+fvm dart run flutter_launcher_icons
+```
 
 ## First sign-in
 

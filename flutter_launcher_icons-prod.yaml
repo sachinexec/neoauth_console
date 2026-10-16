@@ -1,0 +1,11 @@
+# The prod build's launcher icons. The images are rendered from the in-app logo
+# by tool/render_brand_assets.dart; see there to regenerate.
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/branding/icon_prod.png
+  remove_alpha_ios: true
+  adaptive_icon_background: assets/branding/icon_background.png
+  adaptive_icon_foreground: assets/branding/icon_foreground.png
+  # Laid out for the full 108dp canvas already; see the render script.
+  adaptive_icon_foreground_inset: 0

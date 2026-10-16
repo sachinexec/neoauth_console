@@ -42,7 +42,7 @@ android {
             dimension = "env"
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
-            resValue("string", "app_name", "NeoAuth Console")
+            resValue("string", "app_name", "NeoAuth Console Dev")
         }
         create("prod") {
             dimension = "env"

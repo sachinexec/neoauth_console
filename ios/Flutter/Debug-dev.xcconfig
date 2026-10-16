@@ -1,3 +1,6 @@
 // Debug build of the dev flavor (flutter build/run --flavor dev).
 #include "Generated.xcconfig"
-APP_DISPLAY_NAME = NeoAuth Console
+APP_DISPLAY_NAME = NeoAuth Console Dev
+// Here, not in project.pbxproj: flutter_launcher_icons rewrites every
+// ASSETCATALOG_* line in the flavored project configs to the icon set name.
+ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES
