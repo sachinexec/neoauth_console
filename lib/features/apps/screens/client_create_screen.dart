@@ -117,7 +117,7 @@ class _ClientCreateScreenState extends ConsumerState<ClientCreateScreen> {
                     maxLength: 100,
                     decoration: const InputDecoration(
                       labelText: 'Name',
-                      hintText: 'e.g. Astro Graph iOS',
+                      hintText: 'e.g. Acme iOS',
                       helperText: 'Shown to users on consent screens and in their devices list.',
                     ),
                     validator: (v) => (v ?? '').trim().isEmpty ? 'Required' : null,

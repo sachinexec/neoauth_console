@@ -6,7 +6,7 @@ admins. Flutter, pinned with fvm.
 
 ## Environments
 
-Two flavors, set up like astro-graph's Flutter app:
+Two flavors:
 
 | Flavor | Config file | Android package | iOS bundle ID | App name |
 |---|---|---|---|---|

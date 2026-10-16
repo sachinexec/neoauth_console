@@ -76,7 +76,7 @@ class _AppCreateScreenState extends ConsumerState<AppCreateScreen> {
           children: [
             SectionCard(
               title: 'App',
-              subtitle: 'One product (e.g. "Astro Graph"). Its websites and mobile apps are clients of it.',
+              subtitle: 'One product (e.g. "Acme"). Its websites and mobile apps are clients of it.',
               child: Column(
                 children: [
                   TextFormField(
