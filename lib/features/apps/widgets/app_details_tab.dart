@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/auth/auth_providers.dart';
 import '../../../core/format.dart';
+import '../../../core/router.dart';
 import '../../../shared/validators.dart';
 import '../../../shared/widgets/common.dart';
-import '../../../shared/widgets/copy_field.dart';
 import '../../../shared/widgets/dialogs.dart';
 import '../apps_repository.dart';
 import '../models/app_models.dart';
@@ -20,6 +21,8 @@ class AppDetailsTab extends ConsumerStatefulWidget {
 
 class _AppDetailsTabState extends ConsumerState<AppDetailsTab> with AutomaticKeepAliveClientMixin {
   final _form = GlobalKey<FormState>();
+  late final _slug = TextEditingController();
+  late final _audience = TextEditingController();
   late final _name = TextEditingController();
   late final _description = TextEditingController();
   late final _icon = TextEditingController();
@@ -34,7 +37,7 @@ class _AppDetailsTabState extends ConsumerState<AppDetailsTab> with AutomaticKee
   void initState() {
     super.initState();
     _load(widget.app);
-    for (final c in [_name, _description, _icon, _marketing]) {
+    for (final c in [_slug, _audience, _name, _description, _icon, _marketing]) {
       c.addListener(() => setState(() {}));
     }
   }
@@ -46,6 +49,8 @@ class _AppDetailsTabState extends ConsumerState<AppDetailsTab> with AutomaticKee
   }
 
   void _load(AppModel a) {
+    _slug.text = a.slug;
+    _audience.text = a.apiAudience;
     _name.text = a.name;
     _description.text = a.description ?? '';
     _icon.text = a.iconUrl ?? '';
@@ -54,7 +59,7 @@ class _AppDetailsTabState extends ConsumerState<AppDetailsTab> with AutomaticKee
 
   @override
   void dispose() {
-    for (final c in [_name, _description, _icon, _marketing]) {
+    for (final c in [_slug, _audience, _name, _description, _icon, _marketing]) {
       c.dispose();
     }
     super.dispose();
@@ -63,6 +68,8 @@ class _AppDetailsTabState extends ConsumerState<AppDetailsTab> with AutomaticKee
   Map<String, Object?> get _changes {
     final a = widget.app;
     return {
+      if (_slug.text.trim() != a.slug) 'slug': _slug.text.trim(),
+      if (_audience.text.trim() != a.apiAudience) 'api_audience': _audience.text.trim(),
       if (_name.text.trim() != a.name) 'name': _name.text.trim(),
       if (trimmedOrNull(_description.text) != a.description) 'description': trimmedOrNull(_description.text),
       if (trimmedOrNull(_icon.text) != a.iconUrl) 'icon_url': trimmedOrNull(_icon.text),
@@ -74,10 +81,23 @@ class _AppDetailsTabState extends ConsumerState<AppDetailsTab> with AutomaticKee
 
   Future<void> _save() async {
     if (!_form.currentState!.validate()) return;
+    final changes = _changes;
+    if (changes.containsKey('slug') || changes.containsKey('api_audience')) {
+      final ok = await showConfirmDialog(
+        context,
+        title: 'Change app identity?',
+        message:
+            'Access tokens issued for the old API audience stop being accepted, so users must sign in again, and your '
+            'API must expect the new audience. Existing client IDs keep working. The app\'s page address changes with its slug.',
+        confirmLabel: 'Change',
+        destructive: true,
+      );
+      if (!ok || !mounted) return;
+    }
     setState(() => _saving = true);
     final updated = await runAction(
       context,
-      () => ref.read(appsRepositoryProvider).update(widget.app.slug, _changes),
+      () => ref.read(appsRepositoryProvider).update(widget.app.slug, changes),
       success: 'Saved',
     );
     if (!mounted) return;
@@ -86,6 +106,7 @@ class _AppDetailsTabState extends ConsumerState<AppDetailsTab> with AutomaticKee
       _load(updated);
       ref.invalidate(appDetailProvider(widget.app.slug));
       ref.invalidate(appsListProvider);
+      if (updated.slug != widget.app.slug) context.go(Routes.app(updated.slug));
     }
   }
 
@@ -132,9 +153,34 @@ class _AppDetailsTabState extends ConsumerState<AppDetailsTab> with AutomaticKee
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                CopyField(label: 'Slug', value: app.slug, dense: true),
-                const SizedBox(height: 12),
-                CopyField(label: 'API audience', value: app.apiAudience, dense: true),
+                TextFormField(
+                  controller: _slug,
+                  enabled: canEdit && !app.isConsole,
+                  autocorrect: false,
+                  decoration: const InputDecoration(
+                    labelText: 'Slug',
+                    helperText: 'Lowercase letters, digits and dashes. Changing it changes this page\'s address.',
+                    helperMaxLines: 2,
+                  ),
+                  validator: (v) => AppModel.slugPattern.hasMatch((v ?? '').trim())
+                      ? null
+                      : '2 to 40 characters: a-z, 0-9 and "-", not starting with "-"',
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _audience,
+                  enabled: canEdit && !app.isConsole,
+                  keyboardType: TextInputType.url,
+                  autocorrect: false,
+                  decoration: InputDecoration(
+                    labelText: 'API audience URL',
+                    helperText: app.isConsole
+                        ? 'The console app uses the admin API and cannot be changed.'
+                        : "Your API's identifier. Must be unique. Changing it invalidates existing tokens.",
+                    helperMaxLines: 2,
+                  ),
+                  validator: validateHttpUrl,
+                ),
                 const SizedBox(height: 8),
                 InfoRow(label: 'Created', value: formatDateTime(app.createdAt)),
                 InfoRow(label: 'App ID', value: app.id, monospace: true),

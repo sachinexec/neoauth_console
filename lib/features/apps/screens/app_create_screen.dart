@@ -92,7 +92,7 @@ class _AppCreateScreenState extends ConsumerState<AppCreateScreen> {
                     controller: _slug,
                     decoration: const InputDecoration(
                       labelText: 'Slug',
-                      helperText: 'Lowercase letters, digits and dashes. Used in client IDs; cannot be changed.',
+                      helperText: 'Lowercase letters, digits and dashes. Used in client IDs and the app page address.',
                       helperMaxLines: 2,
                     ),
                     autocorrect: false,
