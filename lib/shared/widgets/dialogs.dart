@@ -60,6 +60,7 @@ class _ConfirmDialogState extends State<_ConfirmDialog> {
     final scheme = Theme.of(context).colorScheme;
     return AlertDialog(
       title: Text(widget.title),
+      // bottom-inset-ok: dialog content, not the bottom edge of the window
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -231,6 +232,7 @@ Future<void> showSecretDialog(
       return AlertDialog(
         icon: Icon(Icons.key_outlined, color: scheme.primary),
         title: Text(title),
+        // bottom-inset-ok: dialog content, not the bottom edge of the window
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,

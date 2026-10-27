@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/api/api_exception.dart';
 import '../../core/theme.dart';
 import 'async_value_view.dart';
+import '../../ui/bottom_inset.dart';
 
 /// A titled card grouping related fields.
 class SectionCard extends StatelessWidget {
@@ -62,7 +63,7 @@ class PageBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: padding,
+      padding: padding.safeBottom(context),
       children: [
         Center(
           child: ConstrainedBox(

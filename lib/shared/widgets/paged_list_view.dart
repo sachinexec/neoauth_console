@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/misc.dart' show ProviderListenable;
 
 import '../paged.dart';
 import 'async_value_view.dart';
+import '../../ui/bottom_inset.dart';
 
 /// An infinite-scroll list over a [PagedNotifier] provider.
 class PagedListView<T> extends ConsumerWidget {
@@ -44,7 +45,7 @@ class PagedListView<T> extends ConsumerWidget {
       child: RefreshIndicator(
         onRefresh: onRefresh,
         child: ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: 8).safeBottom(context),
           itemCount: state.items.length + (showFooter ? 1 : 0),
           itemBuilder: (context, i) {
             if (i == state.items.length) {

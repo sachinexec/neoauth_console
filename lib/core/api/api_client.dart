@@ -34,7 +34,9 @@ class ApiClient {
 
   Future<Map<String, dynamic>> put(String path, {Object? body}) => _json(() => _dio.put<Object?>(path, data: body));
 
-  Future<Map<String, dynamic>> delete(String path) => _json(() => _dio.delete<Object?>(path));
+  /// [body] is for the few DELETEs that carry one (e.g. a reason).
+  Future<Map<String, dynamic>> delete(String path, {Object? body}) =>
+      _json(() => _dio.delete<Object?>(path, data: body));
 
   /// For endpoints answering 204 No Content.
   Future<void> postVoid(String path, {Object? body}) =>

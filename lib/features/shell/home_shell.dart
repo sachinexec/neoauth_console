@@ -18,6 +18,7 @@ class _Destination {
 const _destinations = [
   _Destination('Overview', Icons.dashboard_outlined, Icons.dashboard),
   _Destination('Apps', Icons.apps_outlined, Icons.apps),
+  _Destination('Billing', Icons.payments_outlined, Icons.payments),
   _Destination('Users', Icons.people_outline, Icons.people),
   _Destination('Audit log', Icons.receipt_long_outlined, Icons.receipt_long),
   _Destination('Settings', Icons.settings_outlined, Icons.settings),

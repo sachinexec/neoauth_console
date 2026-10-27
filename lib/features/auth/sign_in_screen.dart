@@ -14,6 +14,7 @@ class SignInScreen extends ConsumerWidget {
     return Scaffold(
       body: SafeArea(
         child: Center(
+          // bottom-inset-ok: inside the SafeArea above
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
             child: ConstrainedBox(

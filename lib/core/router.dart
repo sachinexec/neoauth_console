@@ -10,6 +10,10 @@ import '../features/apps/screens/apps_screen.dart';
 import '../features/apps/screens/client_create_screen.dart';
 import '../features/apps/screens/client_detail_screen.dart';
 import '../features/audit/audit_screen.dart';
+import '../features/billing/screens/billing_app_create_screen.dart';
+import '../features/billing/screens/billing_app_detail_screen.dart';
+import '../features/billing/screens/billing_apps_screen.dart';
+import '../features/billing/screens/billing_audit_screen.dart';
 import '../features/auth/sign_in_screen.dart';
 import '../features/overview/overview_screen.dart';
 import '../features/settings/settings_screen.dart';
@@ -30,6 +34,10 @@ abstract final class Routes {
   static String app(String slug, {String? tab}) => '/apps/$slug${tab != null ? '?tab=$tab' : ''}';
   static String newClient(String slug) => '/apps/$slug/clients/new';
   static String client(String slug, String clientId) => '/apps/$slug/clients/${Uri.encodeComponent(clientId)}';
+  static const billing = '/billing';
+  static const newBillingApp = '/billing/new';
+  static const billingAudit = '/billing/audit';
+  static String billingApp(String slug, {String? tab}) => '/billing/$slug${tab != null ? '?tab=$tab' : ''}';
   static const users = '/users';
   static String user(String id) => '/users/$id';
   static const audit = '/audit';
@@ -88,6 +96,25 @@ final routerProvider = Provider<GoRouter>((ref) {
                         ),
                       ),
                     ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: Routes.billing,
+                builder: (_, _) => const BillingAppsScreen(),
+                routes: [
+                  GoRoute(path: 'new', builder: (_, _) => const BillingAppCreateScreen()),
+                  GoRoute(path: 'audit', builder: (_, _) => const BillingAuditScreen()),
+                  GoRoute(
+                    path: ':slug',
+                    builder: (_, s) => BillingAppDetailScreen(
+                      slug: s.pathParameters['slug']!,
+                      initialTab: s.uri.queryParameters['tab'],
+                    ),
                   ),
                 ],
               ),

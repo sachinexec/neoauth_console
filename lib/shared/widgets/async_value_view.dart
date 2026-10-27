@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/api/api_exception.dart';
+import '../../ui/bottom_inset.dart';
 
 /// Renders an [AsyncValue]: a spinner while loading, an error with a retry
 /// button, an empty state, or the data. Keeps showing stale data while a
@@ -58,7 +59,7 @@ class ErrorView extends StatelessWidget {
     final network = error is ApiException && (error as ApiException).isNetwork;
     return Center(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(24).safeBottom(context),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
           child: Column(

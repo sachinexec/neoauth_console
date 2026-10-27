@@ -8,6 +8,7 @@ import '../../../shared/widgets/async_value_view.dart';
 import '../../../shared/widgets/common.dart';
 import '../apps_repository.dart';
 import '../models/app_models.dart';
+import '../../../ui/bottom_inset.dart';
 
 class AppsScreen extends ConsumerWidget {
   const AppsScreen({super.key});
@@ -37,7 +38,7 @@ class AppsScreen extends ConsumerWidget {
             icon: Icons.apps_outlined,
           ),
           data: (list) => ListView.separated(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 96).safeBottom(context),
             itemCount: list.length,
             separatorBuilder: (_, _) => const SizedBox(height: 8),
             itemBuilder: (context, i) => Center(

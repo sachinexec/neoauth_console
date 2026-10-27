@@ -174,6 +174,7 @@ class _AddWebhookDialogState extends State<_AddWebhookDialog> {
       title: const Text('Add webhook'),
       content: Form(
         key: _form,
+        // bottom-inset-ok: dialog content, not the bottom edge of the window
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,

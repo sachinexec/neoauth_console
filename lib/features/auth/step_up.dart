@@ -6,6 +6,7 @@ import '../../core/api/api_client.dart';
 import '../../core/auth/auth_providers.dart';
 import '../../core/router.dart';
 import 'sign_in_form.dart';
+import '../../ui/bottom_inset.dart';
 
 /// Shows the re-authenticate sheet. Resolves to the signed-in user, or null
 /// when dismissed. Signing in replaces the SDK session with a fresh one, so
@@ -19,7 +20,8 @@ Future<NeoAuthUser?> showStepUpSheet(BuildContext context, {String? phone, Strin
     builder: (context) {
       final theme = Theme.of(context);
       return Padding(
-        padding: EdgeInsets.fromLTRB(24, 0, 24, 24 + MediaQuery.viewInsetsOf(context).bottom),
+        padding: EdgeInsets.fromLTRB(24, 0, 24, 24 + MediaQuery.viewInsetsOf(context).bottom).safeBottom(context),
+        // bottom-inset-ok: the Padding around it adds the keyboard and system insets
         child: SingleChildScrollView(
           child: Center(
             child: ConstrainedBox(
