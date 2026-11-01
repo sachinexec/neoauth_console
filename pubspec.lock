@@ -472,16 +472,20 @@ packages:
   neoauth:
     dependency: "direct main"
     description:
-      path: "../neoauth"
-      relative: true
-    source: path
-    version: "0.1.0"
+      path: "."
+      ref: "v0.2.0"
+      resolved-ref: "898f58da1f7fdd3d3e8511fd25b9fed17a4ee353"
+      url: "https://github.com/sachinexec/neoauth.git"
+    source: git
+    version: "0.2.0"
   neokit_flavor_banner:
     dependency: "direct main"
     description:
-      path: "../../neokit/flutter/packages/neokit_flavor_banner"
-      relative: true
-    source: path
+      path: "flutter/packages/neokit_flavor_banner"
+      ref: "28ede05f5a7bafcc937560b29cb04a3a1404f7fe"
+      resolved-ref: "28ede05f5a7bafcc937560b29cb04a3a1404f7fe"
+      url: "https://github.com/sachinexec/neokit.git"
+    source: git
     version: "0.1.0"
   objective_c:
     dependency: transitive
