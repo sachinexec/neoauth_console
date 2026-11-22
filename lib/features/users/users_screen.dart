@@ -103,7 +103,9 @@ class UserTile extends StatelessWidget {
         ].join('\n'),
       ),
       isThreeLine: contact.isNotEmpty && u.name != null,
-      trailing: u.status == 'active' ? null : StatusChip.status(u.status),
+      trailing: u.status != 'active'
+          ? StatusChip.status(u.status)
+          : (u.isAnonymous ? const StatusChip(label: 'Anonymous', icon: Icons.no_accounts_outlined) : null),
       onTap: () => context.go(Routes.user(u.id)),
     );
   }

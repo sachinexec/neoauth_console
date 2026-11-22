@@ -8,7 +8,10 @@ enum LoginMethod {
   apple('Apple', Icons.apple),
   phone('Phone (SMS code)', Icons.sms_outlined),
   email('Email code', Icons.alternate_email),
-  passkey('Passkey', Icons.fingerprint);
+  passkey('Passkey', Icons.fingerprint),
+
+  /// Native apps only. A per-install secret; linking a real method later keeps the account.
+  anonymous('Anonymous (per device)', Icons.no_accounts_outlined);
 
   const LoginMethod(this.label, this.icon);
   final String label;

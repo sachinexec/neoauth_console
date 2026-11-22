@@ -16,6 +16,7 @@ class UserSummary {
     this.primaryEmail,
     this.phone,
     this.createdAt,
+    this.isAnonymous = false,
   });
 
   final String id;
@@ -25,6 +26,9 @@ class UserSummary {
   final String status;
   final DateTime? createdAt;
   final int appCount;
+
+  /// Signed in only with a device secret; no contact details.
+  final bool isAnonymous;
 
   String get displayName => name ?? primaryEmail ?? phone ?? id;
 
@@ -36,6 +40,7 @@ class UserSummary {
     status: optString(j, 'status') ?? 'active',
     createdAt: optDate(j, 'created_at'),
     appCount: optInt(j, 'app_count') ?? 0,
+    isAnonymous: optBool(j, 'is_anonymous'),
   );
 }
 
@@ -181,6 +186,7 @@ class UserDetail {
     this.createdAt,
     this.updatedAt,
     this.adminRole,
+    this.isAnonymous = false,
   });
 
   final String id;
@@ -199,6 +205,7 @@ class UserDetail {
   final List<UserPasskey> passkeys;
   final List<UserSession> sessions;
   final AdminRole? adminRole;
+  final bool isAnonymous;
 
   String get displayName => name ?? primaryEmail ?? phone ?? id;
   bool get isSuspended => status == 'suspended';
@@ -220,6 +227,7 @@ class UserDetail {
     passkeys: objList(j, 'passkeys', UserPasskey.fromJson),
     sessions: objList(j, 'sessions', UserSession.fromJson),
     adminRole: AdminRole.tryParse(optString(j, 'admin_role')),
+    isAnonymous: optBool(j, 'is_anonymous'),
   );
 }
 

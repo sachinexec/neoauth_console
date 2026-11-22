@@ -70,9 +70,12 @@ class AuditEvent {
     'user.created',
     'user.deleted',
     'user.erased',
+    'user.superseded',
     'user.suspended',
+    'user.switched',
     'user.unsuspended',
     'user.updated',
+    'user.upgraded',
   ];
 }
 

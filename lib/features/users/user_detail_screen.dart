@@ -161,6 +161,7 @@ class _UserBody extends ConsumerWidget {
             children: [
               if (u.adminRole != null)
                 StatusChip(label: u.adminRole!.label, tone: ChipTone.info, icon: Icons.shield_outlined),
+              if (u.isAnonymous) const StatusChip(label: 'Anonymous', icon: Icons.no_accounts_outlined),
               StatusChip.status(u.status),
             ],
           ),
@@ -338,6 +339,7 @@ class _UserBody extends ConsumerWidget {
     'google' => Icons.g_mobiledata,
     'apple' => Icons.apple,
     'passkey' => Icons.fingerprint,
+    'anonymous' => Icons.no_accounts_outlined,
     _ => Icons.link,
   };
 
@@ -347,6 +349,7 @@ class _UserBody extends ConsumerWidget {
     'google' => 'Google',
     'apple' => 'Apple',
     'passkey' => 'Passkey',
+    'anonymous' => 'Anonymous (device secret)',
     _ => p,
   };
 }

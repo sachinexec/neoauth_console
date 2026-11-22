@@ -66,13 +66,14 @@ class _KpiGrid extends StatelessWidget {
       _Kpi('Active users', totals.activeUsers, Icons.person_outline),
       _Kpi('Sign-ups (30 d)', totals.signups30d, Icons.person_add_alt),
       _Kpi('Active sessions (30 d)', totals.activeSessions30d, Icons.devices_outlined),
+      _Kpi('Anonymous users', totals.anonymousUsers, Icons.no_accounts_outlined),
       _Kpi('Suspended', totals.suspendedUsers, Icons.block),
       _Kpi('Apps', totals.apps, Icons.apps_outlined),
       _Kpi('Clients', totals.clients, Icons.key_outlined),
     ];
     return LayoutBuilder(
       builder: (context, c) {
-        final columns = c.maxWidth >= 900 ? 6 : (c.maxWidth >= 560 ? 3 : 2);
+        final columns = c.maxWidth >= 1100 ? 7 : (c.maxWidth >= 560 ? 4 : 2);
         const gap = 12.0;
         final width = (c.maxWidth - gap * (columns - 1)) / columns;
         return Wrap(

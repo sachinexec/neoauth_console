@@ -9,6 +9,7 @@ const _support = ProviderSupport({
   LoginMethod.phone: SurfaceSupport(web: true, native: true),
   LoginMethod.email: SurfaceSupport(web: true, native: true),
   LoginMethod.passkey: SurfaceSupport(web: true, native: false),
+  LoginMethod.anonymous: SurfaceSupport(web: false, native: true),
 });
 
 /// Hosts the editor with its own state, like the providers tab does.
@@ -72,13 +73,14 @@ void main() {
     expect(find.textContaining('Not configured on this server'), findsNWidgets(2)); // google, apple
     expect(find.text('Web sign-in only (not configured for native apps)'), findsOneWidget); // passkey
     expect(find.text('Web and native apps'), findsNWidgets(2)); // phone, email
+    expect(find.text('Native apps only (not available on the web page)'), findsOneWidget); // anonymous
   });
 
   testWidgets('a client cannot enable methods its app has turned off', (tester) async {
     await tester.pumpWidget(const _Host({LoginMethod.phone}, allowed: {LoginMethod.phone, LoginMethod.email}));
     expect(_tile(tester, LoginMethod.google).onChanged, isNull);
     expect(_tile(tester, LoginMethod.email).onChanged, isNotNull);
-    expect(find.text('Turned off for the app'), findsNWidgets(3));
+    expect(find.text('Turned off for the app'), findsNWidgets(4)); // google, apple, passkey, anonymous
   });
 
   testWidgets('warns when no selected method is configured on the server', (tester) async {

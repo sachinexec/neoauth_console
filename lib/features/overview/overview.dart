@@ -8,6 +8,7 @@ class OverviewTotals {
     required this.activeUsers,
     required this.suspendedUsers,
     required this.signups30d,
+    this.anonymousUsers = 0,
     required this.apps,
     required this.clients,
     required this.activeSessions30d,
@@ -15,6 +16,9 @@ class OverviewTotals {
 
   final int activeUsers;
   final int suspendedUsers;
+
+  /// Included in [activeUsers].
+  final int anonymousUsers;
   final int signups30d;
   final int apps;
   final int clients;
@@ -23,6 +27,7 @@ class OverviewTotals {
   factory OverviewTotals.fromJson(Json j) => OverviewTotals(
     activeUsers: optInt(j, 'active_users') ?? 0,
     suspendedUsers: optInt(j, 'suspended_users') ?? 0,
+    anonymousUsers: optInt(j, 'anonymous_users') ?? 0,
     signups30d: optInt(j, 'signups_30d') ?? 0,
     apps: optInt(j, 'apps') ?? 0,
     clients: optInt(j, 'clients') ?? 0,

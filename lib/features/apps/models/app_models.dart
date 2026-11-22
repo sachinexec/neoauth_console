@@ -201,6 +201,7 @@ class WebhookEndpoint {
     'user.suspended': 'Account suspended',
     'user.unsuspended': 'Account restored',
     'user.deleted': 'Account deleted',
+    'user.superseded': 'Anonymous account replaced by an existing one',
     'session.revoked': 'Session signed out',
   };
 }
