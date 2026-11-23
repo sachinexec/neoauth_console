@@ -20,6 +20,16 @@ class BillingAppsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final config = ref.watch(appConfigProvider);
+    if (!ref.watch(billingAvailableProvider)) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Billing')),
+        body: const EmptyView(
+          title: 'Billing is on the primary instance',
+          message: 'Switch to the primary instance to manage billing.',
+          icon: Icons.payments_outlined,
+        ),
+      );
+    }
     if (!config.billingConfigured) {
       return Scaffold(
         appBar: AppBar(title: const Text('Billing')),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:neoauth/neoauth.dart';
 
 import '../features/admins/admins_screen.dart';
 import '../features/admins/audience_screen.dart';
@@ -56,13 +57,40 @@ String? authRedirect({required bool signedIn, required String location}) {
   return null;
 }
 
+/// Fires when the active instance's session changes, or another instance (with
+/// its own session) becomes active.
+class _AuthRefresh extends ChangeNotifier {
+  _AuthRefresh(this._auth) {
+    _auth.addListener(notifyListeners);
+  }
+
+  NeoAuthClient _auth;
+
+  void follow(NeoAuthClient auth) {
+    if (identical(auth, _auth)) return;
+    _auth.removeListener(notifyListeners);
+    _auth = auth..addListener(notifyListeners);
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _auth.removeListener(notifyListeners);
+    super.dispose();
+  }
+}
+
+/// One router for the app's lifetime; switching instances re-runs the
+/// redirect against the new instance's session instead of rebuilding it.
 final routerProvider = Provider<GoRouter>((ref) {
-  final auth = ref.watch(neoAuthClientProvider);
+  final refresh = _AuthRefresh(ref.read(neoAuthClientProvider));
+  ref.listen(neoAuthClientProvider, (_, auth) => refresh.follow(auth));
   final router = GoRouter(
     navigatorKey: rootNavigatorKey,
     initialLocation: Routes.overview,
-    refreshListenable: auth,
-    redirect: (context, state) => authRedirect(signedIn: auth.isSignedIn, location: state.matchedLocation),
+    refreshListenable: refresh,
+    redirect: (context, state) =>
+        authRedirect(signedIn: ref.read(neoAuthClientProvider).isSignedIn, location: state.matchedLocation),
     routes: [
       GoRoute(path: '/', redirect: (_, _) => Routes.overview),
       GoRoute(path: Routes.signIn, builder: (_, _) => const SignInScreen()),
@@ -162,6 +190,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
     ],
   );
-  ref.onDispose(router.dispose);
+  ref.onDispose(() {
+    router.dispose();
+    refresh.dispose();
+  });
   return router;
 });

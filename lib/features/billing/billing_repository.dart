@@ -293,9 +293,10 @@ class BillingRepository {
 /// Dio for the billing admin API. Sends the console's own NeoAuth access token,
 /// or one for the configured billing resource. Rebuilt (and every provider
 /// below with it) when the account changes, so nothing of one admin's session
-/// is shown to the next.
+/// is shown to the next. Billing belongs to the primary instance only.
 final billingDioProvider = Provider<Dio>((ref) {
   ref.watch(currentUserIdProvider);
+  if (!ref.watch(billingAvailableProvider)) throw StateError('Billing belongs to the primary instance');
   final config = ref.watch(appConfigProvider);
   final base = config.billingAdminBaseUrl;
   if (base == null) throw StateError('Billing is not configured');

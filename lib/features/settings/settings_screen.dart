@@ -25,7 +25,8 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final me = ref.watch(meProvider).value;
-    final config = ref.watch(appConfigProvider);
+    final instance = ref.watch(activeInstanceProvider);
+    final multiInstance = ref.watch(appConfigProvider).hasExtraInstances;
     final user = ref.watch(currentUserProvider);
     final role = ref.watch(roleProvider);
     return Scaffold(
@@ -76,9 +77,10 @@ class SettingsScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                CopyField(label: 'Issuer', value: config.issuer, dense: true),
+                if (multiInstance) InfoRow(label: 'Instance', value: instance.label),
+                CopyField(label: 'Issuer', value: instance.issuer, dense: true),
                 const SizedBox(height: 12),
-                CopyField(label: 'Console client ID', value: config.clientId, dense: true),
+                CopyField(label: 'Console client ID', value: instance.clientId, dense: true),
               ],
             ),
           ),

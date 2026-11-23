@@ -6,6 +6,7 @@ import '../../core/api/api_exception.dart';
 import '../../core/auth/auth_providers.dart';
 import '../../core/theme.dart';
 import '../../shared/widgets/async_value_view.dart';
+import '../../shared/widgets/instance_picker.dart';
 import '../auth/no_access_screen.dart';
 
 class _Destination {
@@ -14,6 +15,9 @@ class _Destination {
   final IconData icon;
   final IconData selectedIcon;
 }
+
+/// The Billing branch, shown on the primary instance only.
+const _billingBranch = 2;
 
 const _destinations = [
   _Destination('Overview', Icons.dashboard_outlined, Icons.dashboard),
@@ -25,17 +29,19 @@ const _destinations = [
 ];
 
 /// The signed-in frame: checks the console role, then shows a bottom
-/// NavigationBar on phones and a NavigationRail on tablets.
+/// NavigationBar on phones and a NavigationRail on tablets. With more than one
+/// instance configured, a banner on top names the active one.
 class HomeShell extends ConsumerWidget {
   const HomeShell({super.key, required this.shell});
   final StatefulNavigationShell shell;
 
-  void _go(int index) => shell.goBranch(index, initialLocation: index == shell.currentIndex);
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) => InstanceBanner(child: _build(context, ref));
+
+  Widget _build(BuildContext context, WidgetRef ref) {
     final me = ref.watch(meProvider);
-    if (!me.hasValue) {
+    // Reloading for another instance or account: never show the last one's frame.
+    if (!me.hasValue || me.isReloading) {
       final error = me.error;
       if (error is ApiException && error.isForbidden) return const NoAccessScreen();
       if (error != null) {
@@ -60,6 +66,21 @@ class HomeShell extends ConsumerWidget {
       return const Scaffold(body: LoadingView(label: 'Loading your account'));
     }
 
+    final instance = ref.watch(activeInstanceProvider);
+    final branches = [
+      for (var i = 0; i < _destinations.length; i++)
+        if (i != _billingBranch || ref.watch(billingAvailableProvider)) i,
+    ];
+    final selected = branches.indexOf(shell.currentIndex);
+    final selectedIndex = selected < 0 ? 0 : selected;
+    void go(int index) {
+      final branch = branches[index];
+      shell.goBranch(branch, initialLocation: branch == shell.currentIndex);
+    }
+
+    // Keyed by instance, so no branch keeps a page (and its place) from another one.
+    final body = KeyedSubtree(key: ValueKey(instance.id), child: shell);
+
     if (Breakpoints.useRail(context)) {
       final extended = MediaQuery.sizeOf(context).width >= Breakpoints.extendedRail;
       return Scaffold(
@@ -70,8 +91,8 @@ class HomeShell extends ConsumerWidget {
               child: NavigationRail(
                 extended: extended,
                 labelType: extended ? NavigationRailLabelType.none : NavigationRailLabelType.all,
-                selectedIndex: shell.currentIndex,
-                onDestinationSelected: _go,
+                selectedIndex: selectedIndex,
+                onDestinationSelected: go,
                 leading: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Icon(
@@ -81,7 +102,7 @@ class HomeShell extends ConsumerWidget {
                   ),
                 ),
                 destinations: [
-                  for (final d in _destinations)
+                  for (final d in branches.map((b) => _destinations[b]))
                     NavigationRailDestination(
                       icon: Icon(d.icon),
                       selectedIcon: Icon(d.selectedIcon),
@@ -91,18 +112,18 @@ class HomeShell extends ConsumerWidget {
               ),
             ),
             const VerticalDivider(width: 1),
-            Expanded(child: shell),
+            Expanded(child: body),
           ],
         ),
       );
     }
     return Scaffold(
-      body: shell,
+      body: body,
       bottomNavigationBar: NavigationBar(
-        selectedIndex: shell.currentIndex,
-        onDestinationSelected: _go,
+        selectedIndex: selectedIndex,
+        onDestinationSelected: go,
         destinations: [
-          for (final d in _destinations)
+          for (final d in branches.map((b) => _destinations[b]))
             NavigationDestination(icon: Icon(d.icon), selectedIcon: Icon(d.selectedIcon), label: d.label),
         ],
       ),

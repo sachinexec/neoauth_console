@@ -32,6 +32,8 @@ the app, so they hold only public values:
   on the Android emulator.
 - `NEOAUTH_CLIENT_ID`: the console's client in that environment, from
   `npm run console -- bootstrap` in `neoauth-backend`.
+- `NEOAUTH_INSTANCES` (optional): further deployments to switch between, see
+  "Instances" below.
 
 - `BILLING_URL`: the billing service (`neobilling-backend`), https (http only for
   `localhost` / `10.0.2.2`, rewritten like the issuer). Empty hides the Billing
@@ -46,6 +48,29 @@ On iOS, `--flavor` selects the `dev`/`prod` scheme and the
 `Debug|Release|Profile-<flavor>` build configurations. Each has an xcconfig in
 `ios/Flutter/` that sets `APP_DISPLAY_NAME`. Each flavor's configurations use
 its own `AppIcon-<flavor>` icon set.
+
+## Instances
+
+The same auth service can run as several fully separate deployments (own
+issuer, database, users and admins). `NEOAUTH_ISSUER` / `NEOAUTH_CLIENT_ID` is
+the primary one; list the others in `NEOAUTH_INSTANCES` as comma-separated
+`Label|https://issuer|console-client-id` entries:
+
+```
+NEOAUTH_INSTANCES=Partner|https://auth.partner.example.com|neoauth-console.native.XXXX
+```
+
+Each deployment bootstraps its own console client, so each entry has its own
+client ID; the admin API and token audience are `<issuer>/admin`. Labels and
+issuers must be unique, issuers https (http only for localhost). A malformed
+value stops the app with an error naming the entry.
+
+With instances configured, a banner on every screen names the active one and
+has a "Switch" menu. Each instance keeps its own session (its own
+secure-storage entry), switching drops everything loaded from the previous
+one and shows the new one's sign-in when there is no session there, and the
+last choice is remembered on the device. Billing appears on the primary
+instance only.
 
 ## Billing
 

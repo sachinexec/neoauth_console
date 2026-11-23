@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/auth/auth_providers.dart';
+
 /// A cursor-paginated list: the server returns items newest first and the
 /// next page is requested with `before=<last item's id>`.
 class PagedState<T> {
@@ -25,6 +27,9 @@ abstract class PagedNotifier<T> extends Notifier<PagedState<T>> {
 
   @override
   PagedState<T> build() {
+    // Fetches go through ref.read, so start over explicitly when the console
+    // switches to another instance: no page of the old one survives.
+    ref.watch(activeInstanceProvider);
     _busy = false;
     _generation++;
     Future.microtask(loadMore);
